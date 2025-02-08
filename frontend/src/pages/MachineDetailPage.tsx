@@ -42,7 +42,7 @@ const MachineDetailPage = () => {
           return;
         }
 
-        const response = await axios.get(`http://localhost:5000/api/machines/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}/api/machines/${id}`);
         
         if (response.data.success && response.data.data) {
           setMakine(response.data.data);

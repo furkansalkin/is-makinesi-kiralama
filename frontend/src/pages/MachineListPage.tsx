@@ -67,7 +67,7 @@ const MachineListPage: React.FC = () => {
   useEffect(() => {
     const fetchMakineler = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/machines');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}/api/machines`);
         if (response.data.success) {
           const makineData = response.data.data;
           setMakineler(makineData);
