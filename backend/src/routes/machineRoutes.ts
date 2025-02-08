@@ -18,7 +18,9 @@ const storage = multer.diskStorage({
     cb(null, uploadPath);
   },
   filename: function (req: Express.Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) {
-    cb(null, Date.now() + path.extname(file.originalname))
+    // Benzersiz bir dosya adı oluştur
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
   }
 });
 
@@ -57,13 +59,13 @@ router.post('/', authMiddleware, upload.array('resimler', 5), async (req: AuthRe
     console.log('Kullanıcı:', req.user);
 
     const files = Array.isArray(req.files) ? req.files : [];
-    const resimUrls = files.map(file => `/uploads/machines/${file.filename}`) || ['/default-machine.jpg'];
+    const resimUrls = files.map(file => `/uploads/machines/${file.filename}`);
 
     const makine = new Machine({
       ...req.body,
       sahibiId: req.user?.userId,
       modelAdi: req.body.model,
-      resimUrl: resimUrls
+      resimUrl: resimUrls.length > 0 ? resimUrls : ['/default-machine.jpg']
     });
 
     await makine.save();
@@ -91,15 +93,38 @@ router.get('/', async (req: Request, res: Response) => {
 // Rastgele makineleri getir
 router.get('/random', async (req: Request, res: Response) => {
   try {
+    console.log('Rastgele makine isteği alındı');
     const count = parseInt(req.query.count as string) || 3;
-    const makineler = await Machine.aggregate([
-      { $match: { durum: 'müsait' } },
-      { $sample: { size: count } }
-    ]);
-    res.json({ success: true, data: makineler });
+    console.log('İstenen makine sayısı:', count);
+
+    // Önce tüm makineleri getir
+    const tumMakineler = await Machine.find()
+      .populate('sahibiId', 'ad soyad')
+      .lean()
+      .exec();
+
+    console.log('Toplam makine sayısı:', tumMakineler.length);
+
+    // Rastgele seçim yap
+    const karistirilmisMakineler = tumMakineler.sort(() => Math.random() - 0.5);
+    const secilenMakineler = karistirilmisMakineler.slice(0, count);
+
+    console.log('Seçilen makineler:', secilenMakineler.map(m => m._id));
+
+    res.json({ 
+      success: true, 
+      data: secilenMakineler,
+      total: tumMakineler.length,
+      selected: secilenMakineler.length
+    });
   } catch (err) {
     const error = err as Error;
-    res.status(500).json({ success: false, message: error.message });
+    console.error('Rastgele makine getirme hatası:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 
