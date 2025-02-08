@@ -189,9 +189,9 @@ const MachineListPage: React.FC = () => {
             onClick={() => navigate(`/makineler/${makine._id}`)}
             className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
-            <div className="relative pb-48">
+            <div className="relative pb-[56.25%] rounded-lg overflow-hidden">
               <img
-                src={makine.resimUrl[0] ? `http://localhost:5000${makine.resimUrl[0]}` : '/default-machine.jpg'}
+                src={makine.resimUrl[0] ? `${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}${makine.resimUrl[0]}` : '/default-machine.jpg'}
                 alt={makine.isim}
                 className="absolute h-full w-full object-cover"
               />

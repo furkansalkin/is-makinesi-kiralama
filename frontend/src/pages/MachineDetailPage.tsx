@@ -93,7 +93,7 @@ const MachineDetailPage = () => {
               <div>
                 <div className="relative pb-[75%] rounded-lg overflow-hidden mb-4">
                   <img
-                    src={makine.resimUrl[activeImage] ? `http://localhost:5000${makine.resimUrl[activeImage]}` : '/default-machine.jpg'}
+                    src={makine.resimUrl[activeImage] ? `${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}${makine.resimUrl[activeImage]}` : '/default-machine.jpg'}
                     alt={makine.isim}
                     className="absolute h-full w-full object-cover"
                   />
@@ -109,7 +109,7 @@ const MachineDetailPage = () => {
                         }`}
                       >
                         <img
-                          src={`http://localhost:5000${url}`}
+                          src={`${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}${url}`}
                           alt={`${makine.isim} ${index + 1}`}
                           className="absolute h-full w-full object-cover"
                         />
