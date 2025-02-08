@@ -16,15 +16,17 @@ const app = express();
 app.use(cors({
   origin: ['https://is-makinesi-kiralama.netlify.app', 'http://localhost:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 
 // Middleware
 app.use(express.json());
 
-// Statik dosyalar için uploads klasörünü açıyoruz
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
-app.use('/uploads/machines', express.static(path.join(__dirname, '../uploads/machines')));
+// Statik dosya servisi için uploads klasörünü ayarla
+const uploadsPath = path.join(__dirname, '../uploads');
+console.log('Uploads path:', uploadsPath);
+app.use('/uploads', express.static(uploadsPath));
 
 // Routes
 app.use('/api/auth', authRoutes);
