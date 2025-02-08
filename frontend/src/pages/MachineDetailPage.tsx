@@ -93,9 +93,13 @@ const MachineDetailPage = () => {
               <div>
                 <div className="relative pb-[75%] rounded-lg overflow-hidden mb-4">
                   <img
-                    src={makine.resimUrl[activeImage] ? `${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}${makine.resimUrl[activeImage]}` : '/default-machine.jpg'}
+                    src={makine.resimUrl[activeImage] ? makine.resimUrl[activeImage].startsWith('http') ? makine.resimUrl[activeImage] : `${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}${makine.resimUrl[activeImage]}` : '/default-machine.jpg'}
                     alt={makine.isim}
                     className="absolute h-full w-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/default-machine.jpg';
+                    }}
                   />
                 </div>
                 {makine.resimUrl.length > 1 && (
@@ -109,9 +113,13 @@ const MachineDetailPage = () => {
                         }`}
                       >
                         <img
-                          src={`${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}${url}`}
+                          src={url.startsWith('http') ? url : `${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}${url}`}
                           alt={`${makine.isim} ${index + 1}`}
                           className="absolute h-full w-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = '/default-machine.jpg';
+                          }}
                         />
                       </button>
                     ))}

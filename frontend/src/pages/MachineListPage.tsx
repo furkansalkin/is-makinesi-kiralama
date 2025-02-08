@@ -191,9 +191,13 @@ const MachineListPage: React.FC = () => {
           >
             <div className="relative pb-[56.25%] rounded-lg overflow-hidden">
               <img
-                src={makine.resimUrl[0] ? `${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}${makine.resimUrl[0]}` : '/default-machine.jpg'}
+                src={makine.resimUrl[0] ? makine.resimUrl[0].startsWith('http') ? makine.resimUrl[0] : `${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}${makine.resimUrl[0]}` : '/default-machine.jpg'}
                 alt={makine.isim}
                 className="absolute h-full w-full object-cover"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/default-machine.jpg';
+                }}
               />
               <div className="absolute top-0 right-0 m-2">
                 <span className={`px-2 py-1 text-sm font-semibold rounded ${
