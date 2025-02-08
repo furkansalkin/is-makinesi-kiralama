@@ -39,7 +39,7 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post<LoginResponse>('http://localhost:5000/api/auth/login', formData);
+      const response = await axios.post<LoginResponse>(`${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}/api/auth/login`, formData);
 
       if (response.data.success) {
         // Token'ı localStorage'a kaydet

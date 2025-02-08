@@ -70,9 +70,13 @@ const HomePage = () => {
               <div key={makine._id} className="bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="relative pb-48">
                   <img 
-                    src={makine.resimUrl[0] ? `http://localhost:5000${makine.resimUrl[0]}` : '/default-machine.jpg'}
+                    src={makine.resimUrl[0] ? makine.resimUrl[0].startsWith('http') ? makine.resimUrl[0] : `${import.meta.env.VITE_API_URL}${makine.resimUrl[0]}` : '/default-machine.jpg'}
                     alt={makine.isim}
                     className="absolute h-full w-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/default-machine.jpg';
+                    }}
                   />
                 </div>
                 <div className="p-6">
