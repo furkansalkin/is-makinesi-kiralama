@@ -17,7 +17,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchRandomMakineler = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/machines/random?count=3');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}/api/machines/random?count=3`);
         if (response.data.success) {
           setOneCikanMakineler(response.data.data);
         }
