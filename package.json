@@ -1,0 +1,14 @@
+{
+  "name": "fullstack-app",
+  "version": "1.0.0",
+  "description": "Modern fullstack web uygulaması",
+  "scripts": {
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+} 
