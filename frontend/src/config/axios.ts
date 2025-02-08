@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// API URL'ini .env dosyasından al
+const API_URL = import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com';
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com',
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json'
   }
@@ -17,6 +20,16 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Hata durumunda konsola yazdır
+    console.error('API Error:', error);
     return Promise.reject(error);
   }
 );

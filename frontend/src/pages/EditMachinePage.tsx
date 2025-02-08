@@ -74,10 +74,7 @@ const EditMachinePage: React.FC = () => {
   useEffect(() => {
     const fetchMakine = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:5000/api/machines/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const response = await axios.get(`${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}/api/machines/${id}`);
 
         if (response.data.success) {
           const makine = response.data.data;
@@ -177,12 +174,16 @@ const EditMachinePage: React.FC = () => {
       }
 
       const token = localStorage.getItem('token');
-      const response = await axios.put(`http://localhost:5000/api/machines/${id}`, formDataToSend, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
+      const response = await axios.put(
+        `${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}/api/machines/${id}`,
+        formDataToSend,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`
+          }
         }
-      });
+      );
 
       if (response.data.success) {
         toast.success('Makine başarıyla güncellendi!');

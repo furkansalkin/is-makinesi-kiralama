@@ -102,12 +102,16 @@ const AddMachinePage: React.FC = () => {
       }
 
       const token = localStorage.getItem('token')
-      const response = await axios.post('http://localhost:5000/api/machines', formDataToSend, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}/api/machines`,
+        formDataToSend,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`
+          }
         }
-      })
+      )
 
       if (response.data.success) {
         toast.success('Makine başarıyla eklendi')

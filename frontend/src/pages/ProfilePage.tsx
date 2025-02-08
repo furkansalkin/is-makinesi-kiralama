@@ -33,7 +33,7 @@ const ProfilePage: React.FC = () => {
     const fetchMakinelerim = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:5000/api/machines/my-machines', {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}/api/machines/my-machines`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (response.data.success) {
@@ -56,7 +56,7 @@ const ProfilePage: React.FC = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.delete(`http://localhost:5000/api/machines/${makineId}`, {
+      const response = await axios.delete(`${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}/api/machines/${makineId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -146,9 +146,13 @@ const ProfilePage: React.FC = () => {
                       <div key={makine._id} className="bg-white rounded-lg shadow-lg overflow-hidden">
                         <div className="relative pb-48">
                           <img
-                            src={makine.resimUrl[0] ? `http://localhost:5000${makine.resimUrl[0]}` : '/default-machine.jpg'}
+                            src={makine.resimUrl[0] ? makine.resimUrl[0].startsWith('http') ? makine.resimUrl[0] : `${import.meta.env.VITE_API_URL || 'https://is-makinesi-kiralama-1.onrender.com'}${makine.resimUrl[0]}` : '/default-machine.jpg'}
                             alt={makine.isim}
                             className="absolute h-full w-full object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = '/default-machine.jpg';
+                            }}
                           />
                           <div className="absolute top-0 right-0 m-2">
                             <span className={`px-2 py-1 text-sm font-semibold rounded ${
